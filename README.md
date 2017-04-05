@@ -1,6 +1,10 @@
 # Didi Challenge Helper Scripts
 Helper Scripts for the Didi Challenge (Team: Transformers!!)
 
+> These Scripts use Python2.x
+
+> New Addition: bag2pointcloud_xyzir.py
+
 ## `rosbag_cooking.py`
 * Extracts a sample image from a bag file in the same directory and prints out a summary and information about the bag file.
 * Prints a lot of information on the file's PointCloud2 Topic and a sample of the data to terminal.
@@ -20,9 +24,16 @@ Helper Scripts for the Didi Challenge (Team: Transformers!!)
   * Run from the command line as follows without brackets and parenthesis:
   * `python2 bag2video.py [file_name.bag] [fps] ["c" or "g" for colour or gray]`
 
+## `bag2pointcloud_xyzir.py`
+  * Extracts the PointCloud2 frames in the bag as an array of frames(topic messages).
+  * Each member of the output array contains an array of the X - Y - Z - Intensity-Ring values in this order.
+  ### Usage:
+    * Run from the command line as follows without brackets and parenthesis:
+    * `python2 bag2pointcloud_xyzir.py [file_name.bag]`
 
-### Also...
 
-## `bag2csv.py`
+### Also Checkout...
+
+## `bag_to_csv`
 * Converts the topics and types of the rosbag into csv format.
 ### Origin: [link to clearpathrobotics!](http://www.clearpathrobotics.com/downloads/support/bag_to_csv.zip)

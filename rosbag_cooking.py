@@ -6,6 +6,7 @@ import cv2
 import os
 # import pandas as pd
 import argparse
+import sensor_msgs.point_cloud2 as pc2
 
 parser = argparse.ArgumentParser(description='ROSBAG File: Cooking ROSBAGs')
 parser.add_argument(
@@ -144,20 +145,21 @@ print "The returned value for row_step is: ", msg.row_step, "\n"
 fields = np.expand_dims(msg.fields, axis=0)
 fields_short = ["x","y","z","intensity","ring"]
 print "fields shape:", fields.shape
-val_pc_vec = np.fromstring(msg.data, dtype=np.uint8)
-print "The new value type is: ", type(val_pc_vec), "\nand the shape is: ",
-val_pc_vec.shape, "\n", "value sample: ", val_pc_vec[:10], "...\n"
-
-print "Reshape the vector back to the given filed headers:\n"
-val_pc_arr = np.reshape(val_pc_vec,(-1,len(msg.fields)))
-print "The new shape is: ", val_pc_arr.shape, "\nWith values: \n", np.vstack((fields_short, val_pc_arr))
-val_pc_arr_headers = np.vstack((fields_short, val_pc_arr))
-cwd = os.getcwd()
-directory = cwd
-print "Saving to directory/file: ", directory
+print "A sample value for the fields is:\n",fields_short,"\n",pc2.read_points(msg).next()
+# val_pc_vec = np.fromstring(msg.data, dtype=np.uint8)
+# print "The new value type is: ", type(val_pc_vec), "\nand the shape is: ",
+# val_pc_vec.shape, "\n", "value sample: ", val_pc_vec[:10], "...\n"
+#
+# print "Reshape the vector back to the given filed headers:\n"
+# val_pc_arr = np.reshape(val_pc_vec,(-1,len(msg.fields)))
+# print "The new shape is: ", val_pc_arr.shape, "\nWith values: \n", np.vstack((fields_short, val_pc_arr))
+# val_pc_arr_headers = np.vstack((fields_short, val_pc_arr))
+# cwd = os.getcwd()
+# directory = cwd
+# print "Saving to directory/file: ", directory
 
 # Save an array to a binary file in NumPy .npy format.
-np.save(directory + "/X_Y_Z_intensity_ring", val_pc_arr_headers)
+# np.save(directory + "/X_Y_Z_intensity_ring", val_pc_arr_headers)
 
 # Save as CSV file without the headers
 # np.savetxt(directory + "/sample_point_cloud output.csv", val_pc_arr, delimiter=",")
@@ -166,4 +168,4 @@ np.save(directory + "/X_Y_Z_intensity_ring", val_pc_arr_headers)
 # data_f = pd.DataFrame(val_pc_arr)
 # df.to_csv(directory, header=fields_short,index=False)
 
-print "Saved."
+# print "Saved."
