@@ -28,10 +28,10 @@ Helper Scripts for the Didi Challenge (Team: Transformers!!)
   * Extracts the PointCloud2 frames in the bag as an array of frames(topic messages).
   * Each member of the output array contains an array of the X - Y - Z - Intensity-Ring values in this order.
   ### Usage:
-    * Run from the command line as follows without brackets and parenthesis:
-    `python2 bag2pointcloud_xyzir.py [file_name.bag]`
-    * The output file can be loaded using:
-    `numpy.load([npy_file_path])`
+  * Run from the command line as follows without brackets and parenthesis:
+  `python2 bag2pointcloud_xyzir.py [file_name.bag]`
+  * The output file can be loaded using:
+  `numpy.load([npy_file_path])`
 
 
 ### Also Checkout...
