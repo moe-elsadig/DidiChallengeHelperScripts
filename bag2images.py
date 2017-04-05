@@ -9,6 +9,7 @@ rosbag_file = None
 folder_name = "images_folder"
 color = "c"
 cwd = os.getcwd()
+
 def extract_images():
 
     bag = rosbag.Bag((rosbag_file), 'r')
@@ -35,7 +36,7 @@ def extract_images():
     print "Done.\n", count, " Images saved to", cwd + "/" + folder_name + "_" + color + "/..."
 
 # if __name__ == '__main__':
-parser = argparse.ArgumentParser(description='Kalman Filter Tracker')
+parser = argparse.ArgumentParser(description='ROSBAG File: bag2images')
 parser.add_argument(
 	'bag',
 	type=str,

@@ -3,9 +3,10 @@ Helper Scripts for the Didi Challenge (Team: Transformers!!)
 
 ## `rosbag_cooking.py`
 * Extracts a sample image from a bag file in the same directory and prints out a summary and information about the bag file.
+* Prints a lot of information on the file's PointCloud2 Topic and a sample of the data to terminal.
 ### Usage:
-  * Open the file and rename 'intersection_1.bag' to the bag file name you want to use in the same directory as this file.
-  * `python2 rosbag_cooking.py`
+  * Run from the command line as follows without brackets and parenthesis:
+  * `python2 rosbag_cooking.py [file_name.bag]`
 
 ## `bag2images.py`
 * Extracts all the images from a give bag file to a folder in the directory of a given name in grayscale or RGB colour.
