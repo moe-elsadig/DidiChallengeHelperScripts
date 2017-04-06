@@ -2,8 +2,11 @@
 Helper Scripts for the Didi Challenge (Team: Transformers!!)
 
 > These Scripts use Python2.x
+
 > New Addition: bag2velo_xy_images.py
+
 > New Addition: PointCloud2Plotter.ipynb
+
 > New Addition: bag2pointcloud_xyzir.py
 
 ## `rosbag_cooking.py`
