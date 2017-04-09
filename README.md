@@ -2,8 +2,11 @@
 Helper Scripts for the Didi Challenge (Team: Transformers!!)
 
 > These Scripts use Python2.x
+
 > New Addition: bag2velo_xy_images.py
+
 > New Addition: PointCloud2Plotter.ipynb
+
 > New Addition: bag2pointcloud_xyzir.py
 
 ## `rosbag_cooking.py`
@@ -18,6 +21,7 @@ Helper Scripts for the Didi Challenge (Team: Transformers!!)
 ### Usage:
 * Run from the command line as follows without brackets and parenthesis:
   `python2 bag2images.py [bag_file_name] [new_images_folder_name] ["c" or "g" for colour or gray]`
+![alt tag](https://github.com/moe-elsadig/DidiChallengeHelperScripts/blob/master/sample_output.png)
 
 ## `bag2video.py`
 * Extracts the images in the bag in video format in grayscale or RGB clolour.
@@ -44,6 +48,8 @@ Helper Scripts for the Didi Challenge (Team: Transformers!!)
 ### Usage:
 * Run from the command line as follows without brackets and parenthesis:
   `python2 bag2velo_xy_images.py [bag_file_name] [int_dpi]`
+  
+![alt tag](https://github.com/moe-elsadig/DidiChallengeHelperScripts/blob/master/2d_plot.png)
 
 
 
