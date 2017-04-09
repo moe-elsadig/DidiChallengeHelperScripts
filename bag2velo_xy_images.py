@@ -40,12 +40,14 @@ def extract_pc_images():
         os.makedirs(directory)
 
     count = 0
+    fig = plt.figure(frameon = False)
     for cloud in pc_clouds:
         x_s = []
         y_s = []
         z_s = []
         i_s = []
         r_s = []
+
         for x,y,z,i,r in cloud:
             x_s.append(x)
             y_s.append(y)
@@ -53,19 +55,33 @@ def extract_pc_images():
             i_s.append(i)
             r_s.append(r)
 
+        # fig = plt.figure(frameon = False)
+        # cm = plt.cm.get_cmap('Spectral')
+        # # colour = np.add(np.abs(x_s),np.abs(y_s))
+        # sc = plt.scatter(x_s, y_s, c=z_s, vmin=-1.6, vmax=-1.5, s=1, edgecolors= '', cmap=cm)
+        # plt.axis('tight')
+        # ax = plt.gca()
+        # ax.axes.get_xaxis().set_visible(False)
+        # ax.axes.get_yaxis().set_visible(False)
+        # ax.patch.set_facecolor('black')
+        # plt.xlim(0)
+
 
         fig = plt.figure(frameon = False)
-        cm = plt.cm.get_cmap('Spectral')
+        cm = plt.cm.get_cmap('bone')
         colour = np.add(np.abs(x_s),np.abs(y_s))
-        sc = plt.scatter(x_s, y_s, c=colour, vmin=0, vmax=150, s=0.05, edgecolors= '', cmap=cm)
-        plt.axis('tight')
+        sc = plt.scatter(x_s, y_s, c=z_s, vmin=-1.6, vmax=-1.5,s=1, edgecolors= '', cmap=cm)
         ax = plt.gca()
         ax.axes.get_xaxis().set_visible(False)
         ax.axes.get_yaxis().set_visible(False)
         ax.patch.set_facecolor('black')
+        ax.set_xlim([0,50])
+        ax.set_ylim([-25,25])
 
         plt.savefig((directory+"/"+rosbag_file+"_velo_xy_images_c_"+str(count)+".png"), bbox_inches='tight', dpi=m_dpi)
         count += 1
+        plt.clf()
+        fig.clf()
 
     # Save the results in .NPY format
     print "Conversion Done."

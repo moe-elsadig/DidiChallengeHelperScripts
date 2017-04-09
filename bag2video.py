@@ -6,8 +6,8 @@ import argparse
 import os
 
 rosbag_file = None
-color = "c"
 cwd = os.getcwd()
+color = "c"
 fps = 30
 
 def extract_video():
