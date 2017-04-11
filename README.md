@@ -3,11 +3,12 @@ Helper Scripts for the Didi Challenge (Team: Transformers!!)
 
 > These Scripts use Python2.x
 
-> New Addition: bag2velo_xy_images.py
 
-> New Addition: PointCloud2Plotter.ipynb
+> New Addition: Feature_extraction_from_velo_points.ipynb
 
-> New Addition: bag2pointcloud_xyzir.py
+
+> New Addition: npy2images.py
+
 
 ## `rosbag_cooking.py`
 * Extracts a sample image from a bag file in the same directory and prints out a summary and information about the bag file.
@@ -48,7 +49,16 @@ Helper Scripts for the Didi Challenge (Team: Transformers!!)
 ### Usage:
 * Run from the command line as follows without brackets and parenthesis:
   `python2 bag2velo_xy_images.py [bag_file_name] [int_dpi]`
-  
+
+## `Feature_extraction_from_velo_points.ipynb`
+* A Notebook exploring how to extract features from the velodyne data provided
+
+## `npy2images.py`
+* Extracts all the points form the `.NPY` file convert to a top-down image, save it and a folder of the images cropped into chuncks of 230x230 to manually label the car/notCar data from the images
+### Usage:
+* Run from the command line as follows without brackets and parenthesis:
+  `python2 npy2images.py [npy_file_name]`
+
 ![alt tag](https://github.com/moe-elsadig/DidiChallengeHelperScripts/blob/master/2d_plot.png)
 
 
