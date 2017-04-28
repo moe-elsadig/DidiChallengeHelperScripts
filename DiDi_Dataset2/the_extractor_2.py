@@ -75,43 +75,49 @@ topics = bag.get_type_and_topic_info()[1].keys()
 
 def extract_tracks():
 
-    print "Extracting tracks...\n"
-    full_msg = bag.read_messages(topics=[topics[0]])
+	print "Extracting tracks...\n"
+	full_msg = bag.read_messages(topics=[topics[0]])
 
-    tracks = []
-    frame_header = ["status", "number", "range_", "rate", "accel", "angle", "width", "late_rate", "moving", "power", "absolute_rate"]
-    # tracks.append(frame)
-    for topic, msg, time in full_msg:
-        for msg1 in msg.tracks:
-            status = msg1.status
-            number = msg1.number
-            range_ = msg1.range
-            rate = msg1.rate
-            accel = msg1.accel
-            angle = msg1.angle
-            width = msg1.width
-            late_rate = msg1.late_rate
-            moving = msg1.moving
-            power = msg1.power
-            absolute_rate = msg1.absolute_rate
+	tracks = []
+	frame_header = ["status", "number", "range_", "rate", "accel", "angle", "width",
+	"late_rate", "moving", "power", "absolute_rate"]
 
-            frame = [status, number, range_, rate, accel, angle, width, late_rate, moving, power, absolute_rate]
+	for topic, msg, time in full_msg:
+		for msg1 in msg.tracks:
+			status = msg1.status
+			number = msg1.number
+			range_ = msg1.range
+			rate = msg1.rate
+			accel = msg1.accel
+			angle = msg1.angle
+			width = msg1.width
+			late_rate = msg1.late_rate
+			moving = msg1.moving
+			power = msg1.power
+			absolute_rate = msg1.absolute_rate
 
-            tracks.append(frame)
+			frame = [status, number, range_, rate, accel, angle, width, late_rate, moving, power, absolute_rate]
 
-    print "Extracting Tracks complete\n"
+			tracks.append(frame)
 
-    with open('tracks.csv', 'wb') as outcsv:
-        writer = csv.DictWriter(outcsv, fieldnames = frame_header, delimiter = ';')
-        writer.writeheader()
 
-        for track in tracks:
-            writer.writerow({"status":track[0], "number":track[1],
+	print "Extracting Tracks complete\n"
+
+	directory = cwd + "/" + rosbag_file[:-4] + "/radar/"
+	if not os.path.exists(directory):
+		os.makedirs(directory)
+
+
+	with open(directory + 'tracks.csv', 'wb') as outcsv:
+		writer = csv.DictWriter(outcsv, fieldnames = frame_header, delimiter = ';')
+		writer.writeheader()
+		for track in tracks:
+			writer.writerow({"status":track[0], "number":track[1],
             "range_":track[2], "rate":track[3], "accel":track[4], "angle":track[5],
             "width":track[6], "late_rate":track[7], "moving":track[8], "power":track[9],
             "absolute_rate":track[10]})
 
-    print "Tracks file saved."
+	print "Tracks file saved."
 
 
 def extract_steering_report():
@@ -146,10 +152,13 @@ def extract_steering_report():
 
 		steering_report.append(frame)
 
-
 	print "Extracting steering_report complete\n"
 
-	with open('steering_report.csv', 'wb') as outcsv:
+	directory = cwd + "/" + rosbag_file[:-4] + "/vehicle/"
+	if not os.path.exists(directory):
+		os.makedirs(directory)
+
+	with open(directory + 'steering_report.csv', 'wb') as outcsv:
 		writer = csv.DictWriter(outcsv, fieldnames = frame_header, delimiter = ';')
 		writer.writeheader()
 
@@ -163,7 +172,6 @@ def extract_steering_report():
 			"fault_connector":frame[11]})
 
 	print "steering_report file saved."
-
 
 
 def extract_brake_report():
@@ -204,10 +212,13 @@ def extract_brake_report():
 
 		brake_report.append(frame)
 
-
 	print "Extracting brake_report complete\n"
 
-	with open('brake_report.csv', 'wb') as outcsv:
+	directory = cwd + "/" + rosbag_file[:-4] + "/vehicle/"
+	if not os.path.exists(directory):
+		os.makedirs(directory)
+
+	with open(directory + 'brake_report.csv', 'wb') as outcsv:
 		writer = csv.DictWriter(outcsv, fieldnames = frame_header, delimiter = ';')
 		writer.writeheader()
 
@@ -244,14 +255,17 @@ def extract_twist():
 
 		twist.append(frame)
 
-
 	print "Extracting twist complete\n"
 
-	with open('twist.csv', 'wb') as outcsv:
+	directory = cwd + "/" + rosbag_file[:-4] + "/vehicle/"
+	if not os.path.exists(directory):
+		os.makedirs(directory)
+
+	with open(directory + 'twist.csv', 'wb') as outcsv:
 		writer = csv.DictWriter(outcsv, fieldnames = frame_header, delimiter = ';')
 		writer.writeheader()
 
-		for frame in brake_report:
+		for frame in twist:
 			writer.writerow({"linear_x":frame[0], "linear_y":frame[1],
 			"linear_z":frame[2], "angular_x":frame[3],
 			"angular_y":frame[4], "angular_z":frame[5]})
@@ -259,102 +273,177 @@ def extract_twist():
 	print "twist file saved."
 
 
+def extract_objects_gps_fix():
+	print "Extracting gps_fix...\n"
 
+	full_msg = bag.read_messages(topics=[topics[4]])
 
+	gps_fix = []
 
+	frame_header = ["status", "service", "latitude", "longitude", "altitude",
+	"position_covariance", "position_covariance_type"]
 
+	for topic, msg, time in full_msg:
+		status = msg.status.status
+		service = msg.status.service
+		latitude = msg.latitude
+		longitude = msg.longitude
+		altitude = msg.altitude
+		position_covariance = msg.position_covariance
+		position_covariance_type = msg.position_covariance_type
 
 
+		frame = [status, service, latitude, longitude, altitude, position_covariance,
+		position_covariance_type]
 
+		gps_fix.append(frame)
 
+	print "Extracting gps_fix complete\n"
 
+	directory = cwd + "/" + rosbag_file[:-4] + "/objects/capture_vehicle/front/gps/fix/"
+	if not os.path.exists(directory):
+		os.makedirs(directory)
 
+	with open(directory + 'fix.csv', 'wb') as outcsv:
+		writer = csv.DictWriter(outcsv, fieldnames = frame_header, delimiter = ';')
+		writer.writeheader()
 
+		for frame in gps_fix:
+			writer.writerow({"status":frame[0], "service":frame[1],
+			"latitude":frame[2], "longitude":frame[3], "altitude":frame[4],
+			"position_covariance":frame[5], "position_covariance_type":frame[6]})
 
+	print "gps_fix file saved."
 
 
+def extract_wheel_speed_report():
+	print "Extracting wheel_speed_report...\n"
 
+	full_msg = bag.read_messages(topics=[topics[5]])
 
+	wheel_speed_report = []
 
+	frame_header = ["front_left", "front_right", "rear_left", "rear_right"]
 
+	for topic, msg, time in full_msg:
+		front_left = msg.front_left
+		front_right = msg.front_right
+		rear_left = msg.rear_left
+		rear_right = msg.rear_right
 
+		frame = [front_left, front_right, rear_left, rear_right]
 
+		wheel_speed_report.append(frame)
 
+	print "Extracting wheel_speed_report complete\n"
 
+	directory = cwd + "/" + rosbag_file[:-4] + "/vehicle/"
+	if not os.path.exists(directory):
+		os.makedirs(directory)
 
+	with open(directory + 'wheel_speed_report.csv', 'wb') as outcsv:
+		writer = csv.DictWriter(outcsv, fieldnames = frame_header, delimiter = ';')
+		writer.writeheader()
 
+		for frame in wheel_speed_report:
+			writer.writerow({"front_left":frame[0], "front_right":frame[1],
+			"rear_left":frame[2], "rear_right":frame[3]})
 
+	print "wheel_speed_report file saved."
 
 
+def extract_objects_gps_rtkfix():
+	print "Extracting gps_rtkfix...\n"
 
+	full_msg = bag.read_messages(topics=[topics[6]])
 
+	gps_rtkfix = []
 
+	frame_header = ["pose_posx", "pose_posy", "pose_posz", "pose_orix", "pose_oriy", "pose_oriz", "pose_oriw",
+	"pose_covariance",
+	"twist_posx", "twist_posy", "twist_posz", "twist_orix", "twist_oriy", "twist_oriz", "twist_covariance"]
 
+	for topic, msg, time in full_msg:
+		pose_posx = msg.pose.pose.position.x
+		pose_posy = msg.pose.pose.position.y
+		pose_posz = msg.pose.pose.position.z
+		pose_orix = msg.pose.pose.orientation.x
+		pose_oriy = msg.pose.pose.orientation.y
+		pose_oriz = msg.pose.pose.orientation.z
+		pose_oriw = msg.pose.pose.orientation.w
+		pose_covariance = msg.pose.covariance
+		twist_posx = msg.twist.twist.linear.x
+		twist_posy = msg.twist.twist.linear.y
+		twist_posz = msg.twist.twist.linear.z
+		twist_orix = msg.twist.twist.angular.x
+		twist_oriy = msg.twist.twist.angular.y
+		twist_oriz = msg.twist.twist.angular.z
+		twist_covariance = msg.twist.covariance
 
+		frame = [pose_posx, pose_posy, pose_posz, pose_orix, pose_oriy, pose_oriz, pose_oriw, pose_covariance,
+		twist_posx, twist_posy, twist_posz, twist_orix, twist_oriy, twist_oriz, twist_covariance]
 
+		gps_rtkfix.append(frame)
 
+	print "Extracting gps_rtkfix complete\n"
 
+	directory = cwd + "/" + rosbag_file[:-4] + "/objects/obs1/rear/gps/rtkfix/"
+	if not os.path.exists(directory):
+		os.makedirs(directory)
 
+	with open(directory + 'pose.csv', 'wb') as outcsv:
+		writer = csv.DictWriter(outcsv, fieldnames = frame_header[:8], delimiter = ';')
+		writer.writeheader()
 
+		for frame in gps_rtkfix:
+			writer.writerow({"pose_posx":frame[0], "pose_posy":frame[1],
+			"pose_posz":frame[2], "pose_orix":frame[3],
+			"pose_oriy":frame[4], "pose_oriz":frame[5],
+			"pose_oriw":frame[6], "pose_covariance":frame[7]})
 
+	with open(directory + 'twist.csv', 'wb') as outcsv:
+		writer = csv.DictWriter(outcsv, fieldnames = frame_header[8:], delimiter = ';')
+		writer.writeheader()
 
+		for frame in gps_rtkfix:
+			writer.writerow({"twist_posx":frame[8], "twist_posy":frame[9],
+			"twist_posz":frame[10], "twist_orix":frame[11],
+			"twist_oriy":frame[12], "twist_oriz":frame[13], "twist_covariance":frame[14]})
 
+	print "gps_rtkfix files saved."
 
 
+def extract_time():
+	print "Extracting time...\n"
 
+	full_msg = bag.read_messages(topics=[topics[7]])
 
+	time_ = []
 
+	frame_header = ["secs", "nsecs"]
 
+	for topic, msg, time in full_msg:
+		secs = msg.time_ref.secs
+		nsecs = msg.time_ref.nsecs
 
+		frame = [secs, nsecs]
 
+		time_.append(frame)
 
+	print "Extracting time complete\n"
 
+	directory = cwd + "/" + rosbag_file[:-4] + "/vehicle/gps/"
+	if not os.path.exists(directory):
+		os.makedirs(directory)
 
+	with open(directory + 'time.csv', 'wb') as outcsv:
+		writer = csv.DictWriter(outcsv, fieldnames = frame_header, delimiter = ';')
+		writer.writeheader()
 
+		for frame in time_:
+			writer.writerow({"secs":frame[0], "nsecs":frame[1]})
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	print "time file saved."
 
 
 
@@ -362,4 +451,11 @@ def extract_twist():
 extract_tracks()
 extract_steering_report()
 extract_brake_report()
+extract_twist()
+extract_objects_gps_fix()
+extract_wheel_speed_report()
+extract_objects_gps_rtkfix()
+extract_time()
+
+
 # End
