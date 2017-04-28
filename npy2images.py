@@ -53,7 +53,7 @@ def extract_cropped_images():
         #Image setup, plot, and save as full frame under the bag file's name
         fig = plt.figure(frameon = False, figsize=(15,15))
         cm = plt.cm.get_cmap('Spectral')
-        sc = plt.scatter(x_s, y_s, c=z_s, s=.5, edgecolors= '', cmap=cm)
+        sc = plt.scatter(x_s, y_s, c=z_s, s=3, edgecolors= '', cmap=cm)
         # plt.axis('square')
         ax = plt.gca()
         ax.axes.get_xaxis().set_visible(False)
