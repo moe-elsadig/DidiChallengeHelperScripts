@@ -9,12 +9,16 @@ import argparse
 cwd = os.getcwd()
 file_name = "approach_1.bag_format_XYZIR.npy"
 
+# Extraction function
 def extract_cropped_images():
     #load all the frames
     print "Loading all frames..."
+
+    #load all the frames in the given npy file
     all_frames = np.asarray(np.load(cwd + "/" + file_name))
     print "Frames loaded.\nExtracting images..."
     img_count = 0
+    #iterate through the frames and limit all x and y values to the range -25 to 25
     for frame in all_frames:
         img_count += 1
         #Extract the points
@@ -35,11 +39,14 @@ def extract_cropped_images():
         del_indeces = []
         del_count = 0
 
+        #limit the points on the frame based on height (enough for pedestrians and vehicles)
+        #create a list of indeces corresponding to points outside the height range
         for i in range(len(z_s)):
             if z_s[i] > 0.8 or z_s[i] < -1.30:
                 del_indeces.append(i-del_count)
                 del_count += 1
 
+        #delete the incdeces obtained above
         for index in del_indeces:
             del z_s[index], x_s[index], y_s[index], i_s[index], r_s[index]
 
@@ -56,11 +63,12 @@ def extract_cropped_images():
         ax.set_ylim([-30,30])
         # plt.colorbar(sc)
 
+        #directory for the images to be saved in
         directory = cwd + "/" + file_name[:5] + "extraction"
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        plt.savefig((directory + "/img_" + str(img_count) + ".png"), bbox_inches='tight', dpi=200, pad_inches=0.0)
+        plt.savefig((directory + "/img_" + str(img_count) + ".png"), bbox_inches='tight', dpi=300, pad_inches=0.0)
 
         #Load the image again for cropping
         croppable_img = cv2.imread(directory + "/img_" + str(img_count) + ".png")
