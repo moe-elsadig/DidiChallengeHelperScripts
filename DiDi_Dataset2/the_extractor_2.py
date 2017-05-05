@@ -446,6 +446,66 @@ def extract_time():
 	print "time file saved."
 
 
+# TODO: Complete this
+def extract_parameter_descriptions():
+	print "Extracting time...\n"
+
+	full_msg = bag.read_messages(topics=[topics[7]])
+
+	time_ = []
+
+	frame_header = ["secs", "nsecs"]
+
+	for topic, msg, time in full_msg:
+
+		directory = cwd + "/" + rosbag_file[:-4] + "/cloud_nodelet/"
+		if not os.path.exists(directory):
+			os.makedirs(directory)
+
+		with open(directory + "parameter_descriptions.txt", "rw" ) as txtfile:
+			txtfile.write(msg)
+		# np.savetxt(directory + "parameter_descriptions.txt", np.str(msg))
+
+
+def extract_velodyne_packets():
+	print "Extracting velodyne_packets...\n"
+
+	full_msg = bag.read_messages(topics=[topics[14]])
+
+	velodyne_packets = []
+
+	frame_header = ["stamp", "packet"]
+
+	for topic, msg, time in full_msg:
+		for packet in msg.packets:
+
+			directory = cwd + "/" + rosbag_file[:-4] + "/velodyne_packets/npy_packets/"
+			if not os.path.exists(directory):
+				os.makedirs(directory)
+
+			stamp = packet.stamp
+			curr_packet = packet
+
+			frame = [stamp, curr_packet]
+
+			velodyne_packets.append(frame)
+
+			np.save((directory + str(stamp)),packet.data)
+
+	print "Extracting velodyne_packets complete\n"
+
+	directory = cwd + "/" + rosbag_file[:-4] + "/velodyne_packets/"
+	if not os.path.exists(directory):
+		os.makedirs(directory)
+
+	with open(directory + 'velodyne_packets.csv', 'wb') as outcsv:
+		writer = csv.DictWriter(outcsv, fieldnames = frame_header, delimiter = ';')
+		writer.writeheader()
+
+		for frame in velodyne_packets:
+			writer.writerow({"stamp":frame[0], "packet":frame[1]})
+
+	print "velodyne_packets file saved and .npy files."
 
 
 extract_tracks()
@@ -456,6 +516,7 @@ extract_objects_gps_fix()
 extract_wheel_speed_report()
 extract_objects_gps_rtkfix()
 extract_time()
-
+# extract_parameter_descriptions()
+extract_velodyne_packets()
 
 # End
