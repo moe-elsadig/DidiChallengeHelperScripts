@@ -20,13 +20,14 @@ def extract_cropped_images():
     img_count = 0
     #iterate through the frames and limit all x and y values to the range -25 to 25
     for frame in all_frames:
+        frame = np.asarray(frame)
         img_count += 1
         #Extract the points
-        x_s = frame[0]
-        y_s = frame[1]
-        z_s = frame[2]
-        i_s = frame[3]
-        r_s = frame[4]
+        x_s = frame[:,0]
+        y_s = frame[:,1]
+        z_s = frame[:,2]
+        i_s = frame[:,3]
+        r_s = frame[:,4]
 
         #Filter on a height limit
         del_indeces = []
@@ -46,14 +47,14 @@ def extract_cropped_images():
         #Image setup, plot, and save as full frame under the bag file's name
         fig = plt.figure(frameon = False, figsize=(15,15))
         cm = plt.cm.get_cmap('Spectral')
-        sc = plt.scatter(x_s, y_s, c=z_s, s=5, edgecolors= '', cmap=cm)
+        sc = plt.scatter(x_s, y_s, c=z_s, s=1, edgecolors= '', cmap=cm)
         # plt.axis('square')
         ax = plt.gca()
         ax.axes.get_xaxis().set_visible(False)
         ax.axes.get_yaxis().set_visible(False)
         ax.patch.set_facecolor('black')
-        ax.set_xlim([-30,30])
-        ax.set_ylim([-30,30])
+        ax.set_xlim([-100,100])
+        ax.set_ylim([-100,100])
         # plt.colorbar(sc)
 
         #directory for the images to be saved in
@@ -74,7 +75,7 @@ def extract_cropped_images():
         step = 230
         #second run offset
         offset = 115
-
+        #
         cropped_img_count = 0
         for x_step in range(np.int(xsize/step)):
             for y_step in range(np.int(ysize/step)):
