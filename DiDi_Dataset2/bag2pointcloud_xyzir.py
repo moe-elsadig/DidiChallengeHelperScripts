@@ -1,3 +1,12 @@
+# sequence:
+# 1- roscore
+# 2-rosrun velodyne_pointcloud cloud_node _calibration:=/opt/ros/kinetic/share/velodyne_pointcloud/params/32db.yaml
+# 3- rosrun rosbag record -O point_cloud_only.bag /velodyne_points
+# 4- rosbag play filename.bag
+
+
+
+
 import sensor_msgs.point_cloud2 as pc2
 import argparse
 import rosbag
