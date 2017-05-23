@@ -19,30 +19,36 @@ def extract_cropped_images():
     print "Frames loaded.\nExtracting images..."
     img_count = 0
     #iterate through the frames and limit all x and y values to the range -25 to 25
+
+    #Filter on a height limit
+    del_indeces = []
+    del_count = 0
+
     for frame in all_frames:
         frame = np.asarray(frame)
         img_count += 1
         #Extract the points
-        x_s = frame[:,0]
-        y_s = frame[:,1]
-        z_s = frame[:,2]
-        i_s = frame[:,3]
-        r_s = frame[:,4]
+        x_s2 = frame[:,0]
+        y_s2 = frame[:,1]
+        z_s2 = frame[:,2]
+        i_s2 = frame[:,3]
+        r_s2 = frame[:,4]
 
-        #Filter on a height limit
-        del_indeces = []
-        del_count = 0
+        x_s = []
+        y_s = []
+        z_s = []
+        i_s = []
+        r_s = []
 
         #limit the points on the frame based on height (enough for pedestrians and vehicles)
         #create a list of indeces corresponding to points outside the height range
-        # for i in range(len(z_s)):
-        #     if z_s[i] > 0.8 or z_s[i] < -1.30:
-        #         del_indeces.append(i-del_count)
-        #         del_count += 1
-
-        #delete the incdeces obtained above
-        for index in del_indeces:
-            del z_s[index], x_s[index], y_s[index], i_s[index], r_s[index]
+        for i in range(len(z_s2)):
+            if z_s2[i] < 0.8 and z_s2[i] > -1.3:
+                x_s.append(x_s2[i])
+                y_s.append(y_s2[i])
+                z_s.append(z_s2[i])
+                i_s.append(i_s2[i])
+                r_s.append(r_s2[i])
 
         #Image setup, plot, and save as full frame under the bag file's name
         fig = plt.figure(frameon = False, figsize=(15,15))
@@ -53,8 +59,8 @@ def extract_cropped_images():
         ax.axes.get_xaxis().set_visible(False)
         ax.axes.get_yaxis().set_visible(False)
         ax.patch.set_facecolor('black')
-        ax.set_xlim([-100,100])
-        ax.set_ylim([-100,100])
+        ax.set_xlim([-50,50])
+        ax.set_ylim([-50,50])
         # plt.colorbar(sc)
 
         #directory for the images to be saved in
@@ -76,25 +82,25 @@ def extract_cropped_images():
         #second run offset
         offset = 115
         #
-        cropped_img_count = 0
-        for x_step in range(np.int(xsize/step)):
-            for y_step in range(np.int(ysize/step)):
-                cropped_img_count += 1
-                cropped_img = croppable_img[step*x_step:step*x_step+step , step*y_step:step*y_step+step]
-                imgdirectory = directory + "/frame_" + str(img_count)
-                if not os.path.exists(imgdirectory):
-                    os.makedirs(imgdirectory)
-                cv2.imwrite((imgdirectory + "/cropped_img_" + str(cropped_img_count) + "_frame_" + str(img_count) + ".png"), cropped_img)
-
-        cropped_img_count = 0
-        for x_step in range(np.int(xsize/step)):
-            for y_step in range(np.int(ysize/step)):
-                cropped_img_count += 1
-                cropped_img = croppable_img[offset+step*x_step:offset+step*x_step+step , offset+step*y_step:offset+step*y_step+step]
-                imgdirectory = directory + "/frame_" + str(img_count)
-                if not os.path.exists(imgdirectory):
-                    os.makedirs(imgdirectory)
-                cv2.imwrite((imgdirectory + "/cropped_img_" + str(cropped_img_count) + "_frame_wo_" + str(img_count) + ".png"), cropped_img)
+        # cropped_img_count = 0
+        # for x_step in range(np.int(xsize/step)):
+        #     for y_step in range(np.int(ysize/step)):
+        #         cropped_img_count += 1
+        #         cropped_img = croppable_img[step*x_step:step*x_step+step , step*y_step:step*y_step+step]
+        #         imgdirectory = directory + "/frame_" + str(img_count)
+        #         if not os.path.exists(imgdirectory):
+        #             os.makedirs(imgdirectory)
+        #         cv2.imwrite((imgdirectory + "/cropped_img_" + str(cropped_img_count) + "_frame_" + str(img_count) + ".png"), cropped_img)
+        #
+        # cropped_img_count = 0
+        # for x_step in range(np.int(xsize/step)):
+        #     for y_step in range(np.int(ysize/step)):
+        #         cropped_img_count += 1
+        #         cropped_img = croppable_img[offset+step*x_step:offset+step*x_step+step , offset+step*y_step:offset+step*y_step+step]
+        #         imgdirectory = directory + "/frame_" + str(img_count)
+        #         if not os.path.exists(imgdirectory):
+        #             os.makedirs(imgdirectory)
+        #         cv2.imwrite((imgdirectory + "/cropped_img_" + str(cropped_img_count) + "_frame_wo_" + str(img_count) + ".png"), cropped_img)
 
     print "Extraction complete.\n"
     print "The number of frames Extracted, Converted then Cropped are: ", img_count, "\n"
